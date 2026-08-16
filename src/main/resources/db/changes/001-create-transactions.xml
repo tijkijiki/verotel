@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="001-create-transactions" author="marta">
+        <comment>Tabulka nahraných bankovních transakcí.</comment>
+        <createTable tableName="transactions">
+            <!-- reference z výpisu je business klíč; varchar snese i vedoucí nuly a alfanumerické kódy -->
+            <column name="reference" type="varchar(64)">
+                <constraints primaryKey="true" primaryKeyName="pk_transactions" nullable="false"/>
+            </column>
+            <!-- timestamptz = okamžik v čase, ukládá se v UTC nezávisle na zóně serveru -->
+            <column name="occurred_at" type="timestamptz">
+                <constraints nullable="false"/>
+            </column>
+            <!-- numeric, nikdy ne float: 4 desetinná místa pokryjí i měny s tisícinami (BHD, KWD) -->
+            <column name="amount" type="numeric(19,4)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="currency" type="varchar(3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="text"/>
+            <column name="imported_at" type="timestamptz" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

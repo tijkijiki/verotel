@@ -10,10 +10,10 @@ cp .env.example .env          # jednorázově, pak doplnit hodnoty
 ```
 
 Skript spustí Postgres přes Docker Compose, načte proměnné z `.env` a nastartuje
-aplikaci na http://localhost:8080. Soubor `.env` je mimo git.
+aplikaci na http://localhost:5000. Soubor `.env` je mimo git.
 
 Připojení do databáze se čte z proměnných prostředí `POSTGRES_URL`, `POSTGRES_USER`,
-`POSTGRES_PASSWORD` (a volitelně `PORT`, výchozí 8080).
+`POSTGRES_PASSWORD` (a volitelně `PORT`, výchozí 5000).
 
 ## Testy
 

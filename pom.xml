@@ -21,6 +21,7 @@
         <micronaut.version>4.10.14</micronaut.version>
         <kotlin.version>2.2.20</kotlin.version>
         <testcontainers.version>1.21.0</testcontainers.version>
+        <commons.csv.version>1.14.1</commons.csv.version>
         <micronaut.runtime>netty</micronaut.runtime>
         <exec.mainClass>cz.tijkijiki.verotel.ApplicationKt</exec.mainClass>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -85,6 +86,13 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- CSV: parsování nahraného výpisu podle RFC 4180 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-csv</artifactId>
+            <version>${commons.csv.version}</version>
+        </dependency>
+
         <!-- Thymeleaf views -->
         <dependency>
             <groupId>io.micronaut.views</groupId>
@@ -139,6 +147,12 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>postgresql</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- parsování HTML ve výpisových testech; verzi řídí Micronaut BOM -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

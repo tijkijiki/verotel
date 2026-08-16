@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Transakce</title>
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            margin: 2rem;
+            text-align: center;
+        }
+
+        table {
+            margin: 0 auto;
+            border-collapse: collapse;
+            min-width: 32rem;
+        }
+
+        th, td {
+            padding: 0.5rem 1rem;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        /* částky se čtou po číslicích pod sebou, proto doprava a neproporcionálně */
+        td.amount, th.amount {
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+
+        tr.largest-income {
+            background: #e8f5e9;
+            font-weight: 600;
+        }
+
+        p.empty {
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+<h1>Transakce</h1>
+
+<table th:if="${!transactions.isEmpty()}">
+    <thead>
+    <tr>
+        <th>Datum</th>
+        <th class="amount">Částka</th>
+        <th>Popis</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="row, iteration : ${transactions}"
+        th:classappend="${iteration.index == highlightIndex} ? 'largest-income' : ''">
+        <td><time th:datetime="${row.occurredAtIso}" th:text="${row.occurredAt}">1. 1. 2023 0:00</time></td>
+        <td class="amount" th:text="${row.formattedAmount}">0 CZK</td>
+        <td th:text="${row.description}">popis</td>
+    </tr>
+    </tbody>
+</table>
+
+<p class="empty" th:if="${transactions.isEmpty()}">Zatím tu nejsou žádné transakce.</p>
+
+<script>
+    // Server posílá pražský čas, protože zónu klienta z HTTP hlaviček zjistit nelze.
+    // Tady ji známe, tak tentýž okamžik přepíšeme do zóny prohlížeče.
+    const format = new Intl.DateTimeFormat(undefined, {
+        day: 'numeric', month: 'numeric', year: 'numeric',
+        hour: 'numeric', minute: '2-digit'
+    });
+
+    for (const element of document.querySelectorAll('time[datetime]')) {
+        const moment = new Date(element.dateTime);
+
+        // nečitelné datum raději necháme tak, jak ho vykreslil server
+        if (!isNaN(moment.getTime())) {
+            element.textContent = format.format(moment);
+        }
+    }
+</script>
+</body>
+</html>
