@@ -12,7 +12,7 @@ open class TransactionImporter(private val repository: TransactionRepository) {
 
     @Transactional
     open fun importBatch(transactions: List<Transaction>): Int {
-        val inserted = repository.insertIgnoringConflicts(transactions).toSet()
+        val inserted = transactions.mapNotNull { repository.insertIgnoringConflict(it) }.toSet()
         val alreadyPresent = transactions.map { it.reference }.filterNot { it in inserted }
 
         if (alreadyPresent.isNotEmpty()) {
